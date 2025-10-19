@@ -1,0 +1,21 @@
+{
+    "m_Dictionary": {
+        "m_DictionaryValues": [
+            {
+                "type": "Viroo.SceneLoader.ApplicationPublisher.Editor.ApplicationSceneBuilderItemData[], Viroo.SceneLoader.ApplicationPublisher.Editor, Version=3.0.522.0, Culture=neutral, PublicKeyToken=null",
+                "key": "items",
+                "value": "{\"m_Value\":[{\"identifier\":\"d85438c3-0e48-47eb-9789-c847e81a9551\",\"title\":\"Assembly Tutorial\",\"thumbnail\":{\"instanceID\":0},\"sceneAsset\":{\"fileID\":102900000,\"guid\":\"7f07a135e471c1c48840696b0c633dcd\",\"type\":3},\"enabled\":false},{\"identifier\":\"eeaa96fc-f4fe-484d-b6f2-5e452a4b8e8d\",\"title\":\"GEDEmo\",\"thumbnail\":{\"instanceID\":0},\"sceneAsset\":{\"fileID\":102900000,\"guid\":\"5d89a9a5f97f1d54a9e552b10e18dc2c\",\"type\":3},\"enabled\":false},{\"identifier\":\"6361e979-b333-4b13-b843-c7ea39ff96cd\",\"title\":\"Demo\",\"thumbnail\":{\"instanceID\":0},\"sceneAsset\":{\"fileID\":102900000,\"guid\":\"4b6a039f17b01cd488d824e355f0d406\",\"type\":3},\"enabled\":true}]}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "compress",
+                "value": "{\"m_Value\":true}"
+            },
+            {
+                "type": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "defaultItemIndex",
+                "value": "{\"m_Value\":2}"
+            }
+        ]
+    }
+}
