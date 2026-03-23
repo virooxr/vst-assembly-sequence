@@ -812,11 +812,7 @@ PrefabInstance:
     - target: {fileID: 609542717029934970, guid: 003532b1dd0951549a738e4626b32997,
         type: 3}
       propertyPath: commandLine
-      value: --arenaId PC-SBARRERA2 --avatarName Sergio Barrera --environmentName
-        Production --contentHost https://virooportal.virtualwareco.com/content/ --identityHost
-        https://virooportal.virtualwareco.com/identity/ --networkingHost https://global.virooportal.virtualwareco.com/networking/
-        --sessionHost https://virooportal.virtualwareco.com/sessions/ --locale en-US
-        --machineName Unity --sessionId IguanaTheProudLogisticians25
+      value: --sessionId devsession --networkingHost http://127.0.0.1:5001
       objectReference: {fileID: 0}
     - target: {fileID: 609542717029934970, guid: 003532b1dd0951549a738e4626b32997,
         type: 3}
