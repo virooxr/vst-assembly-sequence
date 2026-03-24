@@ -47,7 +47,7 @@ public class AssemblyPartsEditor : EditorWindow
     [MenuItem("Window/Viroo/Viroo Studio Templates/Assembly Parts Editor")]
     public static void ShowWindow()
     {
-        GetWindow<AssemblyPartsEditor>("Assembly Parts Editor"); 
+        GetWindow<AssemblyPartsEditor>("Assembly Parts Editor");
     }
 
     private void OnSelectionChange()
@@ -72,7 +72,8 @@ public class AssemblyPartsEditor : EditorWindow
         if (GlobalObjectId.TryParse(config.lastAssemblyGroupGlobalId, out GlobalObjectId globalObjectId))
         {
             assemblyGroup = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(globalObjectId) as AssemblyGroup;
-        } else
+        }
+        else
         {
             assemblyGroup = null;
         }
@@ -214,7 +215,7 @@ public class AssemblyPartsEditor : EditorWindow
             EditorGUILayout.BeginVertical(partItemStyle.GetStyle()); // Item
 
             EditorGUILayout.BeginHorizontal(); // Buttons bar
-            
+
             if (GUILayout.Button($"Select Part"))
             {
                 Selection.activeObject = assemblyPart;
@@ -235,7 +236,7 @@ public class AssemblyPartsEditor : EditorWindow
                 }
 
                 UniqueID uniqueId = assemblyPart.GetComponent<UniqueID>();
-                if ( uniqueId != null)
+                if (uniqueId != null)
                 {
                     DestroyImmediate(uniqueId);
                 }
@@ -312,7 +313,7 @@ public class AssemblyPartsEditor : EditorWindow
 
             // set part properties
             assemblyPart.id = gameObject.name;
-            assemblyPart.partType = gameObject.name; 
+            assemblyPart.partType = gameObject.name;
 
             // add instanced hierardchy as visual feedback
             GameObject startFeedbackGO = new GameObject();
@@ -355,37 +356,35 @@ public class AssemblyPartsEditor : EditorWindow
             assemblyTargetGO.transform.localRotation = obj.transform.localRotation;
             assemblyTargetGO.transform.localScale = obj.transform.localScale;
 
-            List<BoxCollider> tempColliders = new List<BoxCollider>();
-            // Add mesh colliders and set as triggers
-            foreach (Renderer renderer in obj.GetComponentsInChildren<Renderer>(true))
+            Collider[] colliders = assemblyPart.GetComponentsInChildren<Collider>();
+
+            Renderer[] renderers = obj.GetComponentsInChildren<Renderer>(true);
+
+            if (renderers.Length > 0)
             {
-                BoxCollider tempCollider = renderer.gameObject.AddComponent<BoxCollider>();
-                tempColliders.Add(tempCollider);
-            }
+                Bounds combinedBounds = renderers[0].bounds;
 
-            // Move colliders to parent. For the interactable to work, it must have colliders in "root parent"
-            // so they are created in the hierarchy to get correct bounds and them moved "up"
+                for (int i = 1; i < renderers.Length; i++)
+                {
+                    combinedBounds.Encapsulate(renderers[i].bounds);
+                }
 
-            foreach (BoxCollider collider in tempColliders)
-            {
-                BoxCollider boxCodlliderInRoot = assemblyTargetGO.AddComponent<BoxCollider>();
-                boxCodlliderInRoot.isTrigger = true;
+                BoxCollider rootBoxCollider = assemblyTargetGO.AddComponent<BoxCollider>();
+                rootBoxCollider.isTrigger = true;
 
-                Vector3 centerInWorldSpace = collider.transform.TransformPoint(collider.center);
-                Vector3 sizeInWorldSpace = collider.transform.TransformVector(collider.size);
+                Vector3 localCenter = assemblyTargetGO.transform.InverseTransformPoint(combinedBounds.center);
 
-                Vector3 centerInNewLocalSpace = boxCodlliderInRoot.transform.InverseTransformPoint(centerInWorldSpace);
-                Vector3 sizeInNewLocalSpace = boxCodlliderInRoot.transform.InverseTransformVector(sizeInWorldSpace);
+                Vector3 localSize = combinedBounds.size;
+                Vector3 lossyScale = assemblyTargetGO.transform.lossyScale;
 
-                boxCodlliderInRoot.center = centerInNewLocalSpace;
-                boxCodlliderInRoot.size = sizeInNewLocalSpace;
-            }
+                localSize = new Vector3(
+                    lossyScale.x != 0 ? localSize.x / lossyScale.x : localSize.x,
+                    lossyScale.y != 0 ? localSize.y / lossyScale.y : localSize.y,
+                    lossyScale.z != 0 ? localSize.z / lossyScale.z : localSize.z
+                );
 
-            // Remove temporary colliders     
-            while (tempColliders.Count > 0)
-            {
-                DestroyImmediate(tempColliders[0]);
-                tempColliders.RemoveAt(0);
+                rootBoxCollider.center = localCenter;
+                rootBoxCollider.size = localSize;
             }
 
             // Create AssemblyTarget component
@@ -399,7 +398,7 @@ public class AssemblyPartsEditor : EditorWindow
             completableAssemblyTargetData.distanceTolerance = 2;
             completableAssemblyTargetData.angleTolerance = 180;
             completableAssemblyTargetData.disableInteractableWhenPlaced = true;
-            
+
             // Add ScriptMachine to handle Part Target completions 
             ScriptMachine scriptMachine = assemblyTargetGO.AddComponent<ScriptMachine>();
             scriptMachine.nest.SwitchToMacro(config.assemblyTargetCompletableSM);
